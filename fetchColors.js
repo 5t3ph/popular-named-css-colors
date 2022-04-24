@@ -32,9 +32,14 @@ const colors = async () => {
 
     // check each word to find valid named color
     for (let word of words) {
+      word = word.toLowerCase();
+
       const color = tinycolor(word);
-      if (color.isValid() && color.getFormat() === "name") {
-        allColors.push(word.toLowerCase());
+      if (
+        color === "transparent" ||
+        (color.isValid() && color.getFormat() === "name")
+      ) {
+        allColors.push(word);
       }
     }
   }
@@ -47,13 +52,14 @@ const colors = async () => {
   });
 
   for (const [color, count] of Object.entries(colorCounts)) {
-    const contrastColor = tinycolor
+    let contrastColor = tinycolor
       .mostReadable(color, ["#fff"], {
         includeFallbackColors: true,
         level: "AA",
         size: "large",
       })
       .toHexString();
+    contrastColor = color === "transparent" ? "#000" : contrastColor;
     colors.push({ color, contrastColor, count });
   }
 

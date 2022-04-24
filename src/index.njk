@@ -17,6 +17,7 @@
       font-size: 1.25rem;
       line-height: 1.5;
       color: dimgray;
+      margin-bottom: 5vh;
     }
 
     body > * {
@@ -52,6 +53,11 @@
     dl {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(min(100%, 15ch), 1fr));
+      gap: 2rem;
+    }
+
+    dl div {
+      margin-top: 0
     }
 
     dt {
@@ -65,7 +71,20 @@
     }
 
     ol {
-      padding-left: 1em;
+      padding-left: 3ch;
+    }
+
+    .unloved {
+      list-style: none;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(15ch, 1fr));
+      gap: 4vw;
+      padding-left: 0;
+    }
+
+    .unloved li {
+      width: fit-content;
+      border-radius: 1em;
     }
 
     li {
@@ -123,7 +142,8 @@
       <p>"Quick - what are the first 5 named CSS colors that pop in your head?"</p>
       <cite><a href="https://twitter.com/5t3ph/status/1516963306023567362">@5t3ph</a></cite>
     </blockquote>
-    <p>This project was created for silliness only - although 300 responses was a pretty decent sample size! Check out this very cool tool for <a href="https://enes.in/sorted-colors/">exploring named colors</a>.</p>
+    <p>Results gathered for silliness only - although 300 responses was a pretty decent sample size!</p>
+    <p>Check out this very cool tool for <a href="https://enes.in/sorted-colors/">exploring named colors</a>.</p>
   </header>
 
   <main>
@@ -131,15 +151,15 @@
 
     <dl>
       <div>
-        <dt>Unique Colors</dt>
-        <dl>{{ colors | length }}</dl>
+        <dt>Unique Colors Named</dt>
+        <dl><span>{{ colors | length }} <small>/<a href="https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/color_keywords">150 named colors</a></small></span></dl>
       </div>
       <div>
         <dt>Most Popular Color</dt>
         <dl translate="no">{{ mostPopular.color }}</dl>
       </div>
       <div>
-        <dt>Total Color Entries</dt>
+        <dt>Total Colors Replied</dt>
         <dl>{{ colors | totalEntries }}</dl>
       </div>
     </dl>
@@ -149,6 +169,18 @@
     <ol>
       {% for c in colors %}
       <li translate="no" style="background-color: {{ c.color }}; color: {{ c.contrastColor }}; --count: {{ c.count }}%;"><span><strong>{{ c.color }}</strong> {{ c.count }}</span></li>
+      {% endfor %}
+    </ol>
+
+    <h3>"Unloved" Colors</h3>
+    {%- set unlovedColors = colors | unloved(allColors) -%}
+    <p>{{ unlovedColors | length }} colors remain in <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/color_keywords">the color spec</a> that were not included in any replies.</p>
+
+    <ol class="unloved">
+      {% for c in  unlovedColors %}
+      {% set color = '#fff' if c.color === 'currentcolor' else c.color %}
+      {% set contrastColor = '#000' if c.color === 'currentcolor' else c.contrastColor %}
+      <li translate="no" style="background-color: {{ color }}; color: {{ contrastColor }};"><strong>{{ c.color }}</strong></li>
       {% endfor %}
     </ol>
   </main>
