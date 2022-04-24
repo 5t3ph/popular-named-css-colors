@@ -1,3 +1,5 @@
 node_modules
 public
 .env
+# Local Netlify folder
+.netlify

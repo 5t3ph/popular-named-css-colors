@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
+    "start": "npx @11ty/eleventy --serve",
+    "build": "npx @11ty/eleventy",
     "colors": "node fetchColors.js"
   },
   "repository": {
@@ -17,6 +19,7 @@
   },
   "homepage": "https://github.com/5t3ph/popular-named-css-colors#readme",
   "devDependencies": {
+    "@11ty/eleventy": "^2.0.0-canary.8",
     "dotenv": "^16.0.0",
     "tinycolor2": "^1.4.2",
     "twitter-api-v2": "^1.12.0"

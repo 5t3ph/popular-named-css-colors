@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>"Popular" Named CSS Colors</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+    }
+
+    body {
+      font-family: system-ui, sans-serif;
+      font-size: 1.25rem;
+      line-height: 1.5;
+      color: dimgray;
+    }
+
+    body > * {
+      width: min(100% - 2rem, 100ch);
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    header {
+      background-color: whitesmoke;
+      padding: 5vmin;
+    }
+
+    h2 {
+      font-size: 2.25rem;
+    }
+
+    h3 {
+      font-size: 1.75rem;
+    }
+
+    blockquote {
+      padding-left: 1rem;
+      border-left: 3px solid deepskyblue;
+    }
+
+    blockquote p {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: dodgerblue;
+    }
+
+    dl {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 15ch), 1fr));
+    }
+
+    dt {
+      font-weight: bold;
+      font-size: 1.35rem;
+      color: rebeccapurple;
+    }
+
+    ::marker {
+      color: dimgray;
+    }
+
+    ol {
+      padding-left: 1em;
+    }
+
+    li {
+      position: relative;
+      height: 8vh;
+      line-height: 8vh;
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+
+    li span {
+      background-color: inherit;
+      color: inherit;
+      z-index: 1;
+      position: relative;
+      padding: .5rem;
+    }
+
+    @media (min-width: 80ch) {
+      li::after {
+        content: "";
+        background-color: white;
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: calc(100% - calc(100% - var(--count)));
+      }
+    }
+
+    a {
+      color: royalblue;
+      text-underline-offset: 0.15em;
+    }
+
+    *:not(li) + * {
+      margin-top: 1em;
+    }
+
+    h2,
+    * + h3 {
+      margin-top: 3em;
+    }
+
+  </style>
+</head>
+<body>
+  {%- set mostPopular = colors | first -%}
+  {%- set top5 = colors | first -%}
+
+  <header>
+    <h1>"Popular" Named CSS Colors</h1>
+    <p>This project plucks the data from replies to a tweet sent by Stephanie Eckles which asked:</p>
+    <blockquote>
+      <p>"Quick - what are the first 5 named CSS colors that pop in your head?"</p>
+      <cite><a href="https://twitter.com/5t3ph/status/1516963306023567362">@5t3ph</a></cite>
+    </blockquote>
+    <p>This project was created for silliness only - although 300 responses was a pretty decent sample size! Check out this very cool tool for <a href="https://enes.in/sorted-colors/">exploring named colors</a>.</p>
+  </header>
+
+  <main>
+    <h2>Stats</h2>
+
+    <dl>
+      <div>
+        <dt>Unique Colors</dt>
+        <dl>{{ colors | length }}</dl>
+      </div>
+      <div>
+        <dt>Most Popular Color</dt>
+        <dl translate="no">{{ mostPopular.color }}</dl>
+      </div>
+      <div>
+        <dt>Total Color Entries</dt>
+        <dl>{{ colors | totalEntries }}</dl>
+      </div>
+    </dl>
+
+    <h3>Color Frequency</h3>
+
+    <ol>
+      {% for c in colors %}
+      <li translate="no" style="background-color: {{ c.color }}; color: {{ c.contrastColor }}; --count: {{ c.count }}%;"><span><strong>{{ c.color }}</strong> {{ c.count }}</span></li>
+      {% endfor %}
+    </ol>
+  </main>
+</body>
+</html>

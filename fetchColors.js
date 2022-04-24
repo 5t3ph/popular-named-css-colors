@@ -39,12 +39,32 @@ const colors = async () => {
     }
   }
 
+  let colors = [];
+  let colorCounts = [];
+
+  allColors.forEach((color) => {
+    colorCounts[color] = (colorCounts[color] || 0) + 1;
+  });
+
+  for (const [color, count] of Object.entries(colorCounts)) {
+    const contrastColor = tinycolor
+      .mostReadable(color, ["#fff"], {
+        includeFallbackColors: true,
+        level: "AA",
+        size: "large",
+      })
+      .toHexString();
+    colors.push({ color, contrastColor, count });
+  }
+
+  colors.sort((a, b) => b.count - a.count);
+
   let colorsFilePath = path.resolve(__dirname, fs.realpathSync("src/_data"));
   if (!fs.existsSync(colorsFilePath)) {
     console.log("Invalid directory provided");
     process.exit(1);
   }
-  fs.writeFileSync(`${colorsFilePath}/colors.json`, JSON.stringify(allColors), {
+  fs.writeFileSync(`${colorsFilePath}/colors.json`, JSON.stringify(colors), {
     flag: "w",
   });
 };
